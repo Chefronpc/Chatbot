@@ -8,7 +8,7 @@ from openai import OpenAI
 # ==========================
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
-MODEL_NAME = "gpt-4o-mini"
+MODEL_NAME = "gpt-4.1"
 
 if not OPENAI_API_KEY:
     raise EnvironmentError("Brak ustawionej zmiennej środowiskowej OPENAI_API_KEY")
@@ -23,19 +23,20 @@ def send_prompt(prompt: str) -> str:
     payload = {
         "model": MODEL_NAME,
         "input": prompt
+        "previous_response_id": 
     }
     response = requests.post(OPENAI_API_URL, headers=HEADERS, json=payload)
     return response.json()['output'][0]['content'][0]['text']
 
 
-def question(qu_talk_all: str) -> str:
+def question(qu_talk_all: str) -> dict:
     text_in = input("\n> ")
     text_in = text_in.strip()
     print("")
     return {"all": qu_talk_all + "\n" + text_in, "last": text_in}
     
 
-def answer( text_send: str) -> str:
+def answer( text_send: str) -> dict:
     an_response = send_prompt(text_send)
     result_all = text_send + "\n" + an_response
     return {"all": result_all, "last":  an_response}
